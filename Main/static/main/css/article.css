@@ -1,0 +1,16 @@
+#brand{
+    margin-top:-14px;
+}
+.index_tag,.index_date{
+    padding-bottom:16px;
+}
+.last_page{
+    float: left;
+}
+.next_page{
+    float: right;
+}
+.current{
+    display: inline-block;
+    width:30px;
+}

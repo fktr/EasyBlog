@@ -1,0 +1,75 @@
+{% extends 'template.html' %}
+{% load staticfiles %}
+{% block title %}
+    F.H.J's Blog
+{% endblock %}
+{% block mycss %}
+    <link rel="stylesheet" href="{% static 'main/css/article.css' %}">
+{% endblock %}
+{% block myjs %}
+{% endblock %}
+{% block body %}
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+        <a class="navbar-brand" href="{% url 'Main:index' %}">
+            <img src="{% static 'main/img/brand.jpg' %}" id="brand">
+        </a>
+        <ul class="nav navbar-nav">
+            <li class="active"><a href="{% url 'Main:index' %}">首页</a></li>
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">分类阅读<span class="caret"></span></a>
+                <ul class="dropdown-menu" role="menu">
+                    {% for category in category_list %}
+                        <li class="divider"></li>
+                        <li><a href="{% url 'Main:category' category.pk %}">{{ category.name }}</a></li>
+                    {% endfor %}
+                </ul>
+            </li>
+            <li><a href="{% url 'Main:rss' %}">RSS</a></li>
+            <li class="dropdown active">
+                {% if user %}
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ user }}<span class="caret"></span></a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li class="divider"></li>
+                        <li><a href="{% url 'Main:chgpwd' %}">修改密码</a></li>
+                        <li class="divider"></li>
+                        <li><a href="{% url 'Main:logout' %}">登出</a></li>
+                    </ul>
+                {% else %}
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">登录/注册<span class="caret"></span></a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li class="divider"></li>
+                        <li><a href="{% url 'Main:login' %}">登录</a></li>
+                        <li class="divider"></li>
+                        <li><a href="{% url 'Main:register' %}">注册</a></li>
+                    </ul>
+                {% endif %}
+            </li>
+        </ul>
+        <form class="navbar-form pull-right" method="get" action="{% url 'Main:search' %}">
+            <input class="form-control" type="text" name='s' placeholder="Search">
+            <button class="btn btn-success" type="submit">搜索</button>
+        </form>
+    </div>
+</nav>
+<div class="container">
+    <div class="col-md-9">
+        {% block content %}
+        {% endblock %}
+    </div>
+    <div class="col-md-3">
+        <ul>
+            {% for tag in tag_list %}
+                <li class="index_tag"><a class="btn btn-info btn-sm col-md-9" href="{% url 'Main:tag' tag.pk %}">{{ tag.name }}</a></li>
+            {% endfor %}
+        </ul>
+        <ul>
+            {% for year,months in date_archive %}
+                {% for month in months %}
+                    <li class="index_date"><a class="btn btn-warning btn-sm col-md-9" href="{% url 'Main:archive' year month %}">{{ year }}年{{ month }}月</a></li>
+                {% endfor %}
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+{% endblock %}
